@@ -9,7 +9,7 @@ import Input from '../Input/Input';
 
 import './Chat.css';
 
-const ENDPOINT = 'localhost:5000';
+const ENDPOINT = 'http://localhost:5000';
 
 let socket;
 
@@ -37,20 +37,18 @@ const Chat = ({ location }) => {
   
   useEffect(() => {
     socket.on('message', message => {
-      console.log("ui msg",message);
+      console.log('Mesg', message)
       setMessages(messages => [ ...messages, message ]);
     });
-    
-    socket.on("roomData", ({ users }) => {
-      console.log(users)
-      setUsers(users);
-    });
 
-    socket.on('initDataload', ({msgs})=>{
-      console.log("line 50", msgs);
-      // setMessages(messages => [...messages , ...msgs])
+    socket.on('intiLoadMessage', ({ storedMessages }) => {
+      setMessages(messages => [ ...messages, ...storedMessages ]);
     })
-},[]);
+
+      socket.on('roomData', ({ users }) => {
+      setUsers(users);
+      })
+  },[]);
 
   const sendMessage = (event) => {
     event.preventDefault();
